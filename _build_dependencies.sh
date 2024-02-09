@@ -6,7 +6,7 @@ export NODE_VERSION=18
 # Stable Byond Major
 export STABLE_BYOND_MAJOR=514
 # Stable Byond Minor
-export STABLE_BYOND_MINOR=1575
+export STABLE_BYOND_MINOR=1584
 # Beta Byond Major
 export BETA_BYOND_MAJOR=515
 # Beta Byond Minor
