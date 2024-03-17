@@ -32,6 +32,12 @@
 	var/blocks_emissive = FALSE
 	///Internal holder for emissive blocker object, do not use directly use blocks_emissive
 	var/atom/movable/emissive_blocker/em_block
+
+	///Lazylist to keep track on the sources of illumination.
+	var/list/affected_dynamic_lights
+	///Highest-intensity light affecting us, which determines our visibility.
+	var/affecting_dynamic_lumi = 0
+
 	/// Icon state for thought bubbles. Normally set by mobs.
 	var/thought_bubble_image = "thought_bubble"
 
@@ -57,6 +63,12 @@
 			render_target = ref(src)
 			em_block = new(src, render_target)
 			add_overlay(list(em_block))
+
+	switch(light_system)
+		if(MOVABLE_LIGHT)
+			AddComponent(/datum/component/overlay_lighting)
+		if(MOVABLE_LIGHT_DIRECTIONAL)
+			AddComponent(/datum/component/overlay_lighting, is_directional = TRUE)
 
 
 /atom/movable/Destroy()

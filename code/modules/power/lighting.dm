@@ -381,7 +381,7 @@
 		set_emergency_lights()
 	else
 		use_power = IDLE_POWER_USE
-		set_light(0)
+		set_light_on(FALSE)
 
 	update_icon()
 
@@ -390,14 +390,14 @@
 		light_state = on
 		if(on)
 			static_power_used = active_power_usage * 2 //20W per unit luminosity
-			addStaticPower(static_power_used, STATIC_LIGHT)
+			addStaticPower(static_power_used, CHANNEL_STATIC_LIGHT)
 		else
-			removeStaticPower(static_power_used, STATIC_LIGHT)
+			removeStaticPower(static_power_used, CHANNEL_STATIC_LIGHT)
 	else
 		if(on && (static_power_used != active_power_usage * 2))
-			removeStaticPower(static_power_used, STATIC_LIGHT)
+			removeStaticPower(static_power_used, CHANNEL_STATIC_LIGHT)
 			static_power_used = active_power_usage * 2
-			addStaticPower(static_power_used, STATIC_LIGHT)
+			addStaticPower(static_power_used, CHANNEL_STATIC_LIGHT)
 
 	if(play_sound)
 		playsound(src, 'sound/machines/light_on.ogg', 60, TRUE)
@@ -410,7 +410,7 @@
 	do_sparks(2, 1, src)
 
 	on = FALSE
-	set_light(0)
+	set_light_on(FALSE)
 	update_icon()
 
 // attempt to set the light's on/off status

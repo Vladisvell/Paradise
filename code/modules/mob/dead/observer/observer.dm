@@ -18,6 +18,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	blocks_emissive = FALSE // Ghosts are transparent, duh
 	alpha = 127
 	move_resist = INFINITY	//  don't get pushed around
+	light_system = NO_LIGHT_SUPPORT
 	invisibility = INVISIBILITY_OBSERVER
 	var/can_reenter_corpse
 	var/bootime = FALSE
@@ -40,7 +41,6 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
 	see_invisible = SEE_INVISIBLE_OBSERVER_AI_EYE
-	see_in_dark = 100
 	verbs += list(
 		/mob/dead/observer/proc/dead_tele,
 		/mob/dead/observer/proc/open_spawners_menu,
@@ -81,6 +81,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	ghostimage.dir = dir
 	ghostimage.appearance_flags |= KEEP_TOGETHER
 	ghostimage.alpha = alpha
+	underlays.Cut() //Save no underlay lighting on mob
 	appearance_flags |= KEEP_TOGETHER
 	GLOB.ghost_images |= ghostimage
 	updateallghostimages()
@@ -725,9 +726,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/set_invisibility(value)
 	invisibility = value
 	if(!value)
-		set_light(1, 2)
+		set_light_range(1)
+		set_light_power(2)
 	else
-		set_light(0, 0)
+		set_light_on(FALSE)
 
 /mob/dead/observer/vv_edit_var(var_name, var_value)
 	. = ..()

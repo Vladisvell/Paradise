@@ -42,6 +42,10 @@ GLOBAL_VAR(bomb_set)
 	///How many sheets of various metals we need to fix it
 	var/sheets_to_fix = 5
 
+	light_system = MOVABLE_LIGHT
+	light_power = LIGHTING_MINIMUM_POWER
+	light_range = 1
+
 /obj/machinery/nuclearbomb/syndicate
 	is_syndicate = TRUE
 
@@ -113,10 +117,10 @@ GLOBAL_VAR(bomb_set)
 	underlays.Cut()
 
 	if(!lighthack)
-		set_light(1, LIGHTING_MINIMUM_POWER)
+		set_light_on(TRUE)
 		underlays += emissive_appearance(icon, "nuclearbomb_lightmask")
 	else if(light)
-		set_light(0)
+		set_light_on(FALSE)
 
 
 /obj/machinery/nuclearbomb/process()
