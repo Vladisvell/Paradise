@@ -115,21 +115,21 @@
 /obj/machinery/atmospherics/trinary/filter/process_atmos()
 	..()
 	if(!on)
-		return 0
+		return FALSE
 
-	var/output_starting_pressure = air3.return_pressure()
+	var/output_starting_pressure = filter_type == FILTER_NOTHING ? air3.return_pressure() : min(air2.return_pressure(), air3.return_pressure())
 
-	if(output_starting_pressure >= target_pressure || air2.return_pressure() >= target_pressure )
-		//No need to mix if target is already full!
-		return 1
+	if(output_starting_pressure >= target_pressure || (filter_type != FILTER_NOTHING && air2.return_pressure() >= target_pressure))
+		return TRUE
 
 	//Calculate necessary moles to transfer using PV=nRT
 
 	var/pressure_delta = target_pressure - output_starting_pressure
 	var/transfer_moles
 
+	var/available_volume_to_transfer = filter_type == FILTER_NOTHING ? air3.volume : (air2.volume + air3.volume)
 	if(air1.temperature > 0)
-		transfer_moles = pressure_delta*air3.volume/(air1.temperature * R_IDEAL_GAS_EQUATION)
+		transfer_moles = pressure_delta * (available_volume_to_transfer) / (air1.temperature * R_IDEAL_GAS_EQUATION)
 
 	//Actually transfer the gas
 
