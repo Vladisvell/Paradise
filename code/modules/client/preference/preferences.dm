@@ -295,6 +295,25 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 		save_character(C)		// Do not call this with no client/C, it generates a runtime / SQL error
 		C.prefs?.init_custom_emotes(C.prefs.custom_emotes)
 
+/proc/hue_saturation_value_clamp(color)
+	var/hsv = RGBtoHSV(color)
+	var/hue = hex2num("[hsv[2]][hsv[3]][hsv[4]]")
+	var/saturation = clamp(hex2num("[hsv[5]][hsv[6]]"), 80, 170)
+	var/value = clamp(hex2num("[hsv[7]][hsv[8]]"), 80, 170)
+	hue = 100
+	var/new_hsv = hsv(hue, saturation, value)
+	var/new_color = HSVtoRGB(new_hsv)
+	return new_color
+
+/proc/saturation_value_clamp(color)
+	var/hsv = RGBtoHSV(color)
+	var/hue = hex2num("[hsv[2]][hsv[3]][hsv[4]]")
+	var/saturation = clamp(hex2num("[hsv[5]][hsv[6]]"), 80, 170)
+	var/value = clamp(hex2num("[hsv[7]][hsv[8]]"), 80, 170)
+	var/new_hsv = hsv(hue, saturation, value)
+	var/new_color = HSVtoRGB(new_hsv)
+	return new_color
+
 /datum/preferences/proc/color_square(colour)
 	return "<span style='font-face: fixedsys; background-color: [colour]; color: [colour]'>___</span>"
 
@@ -1764,6 +1783,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						var/input = "Choose your character's hair colour:"
 						var/new_hair = input(user, input, "Character Preference", h_colour) as color|null
 						if(new_hair)
+							new_hair = saturation_value_clamp(new_hair)
 							h_colour = new_hair
 
 				if("secondary_hair")
@@ -1772,6 +1792,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						if(hair_style.secondary_theme && !hair_style.no_sec_colour)
 							var/new_hair = input(user, "Choose your character's secondary hair colour:", "Character Preference", h_sec_colour) as color|null
 							if(new_hair)
+								new_hair = saturation_value_clamp(new_hair)
 								h_sec_colour = new_hair
 
 				if("h_style")
@@ -1821,6 +1842,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 				if("h_grad_colour")
 					var/result = input(user, "Choose your character's hair gradient colour:", "Character Preference", h_grad_colour) as color|null
 					if(result)
+						result = saturation_value_clamp(result)
 						h_grad_colour = result
 
 				if("h_grad_alpha")
@@ -1834,6 +1856,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						var/input = "Choose the colour of your your character's head accessory:"
 						var/new_head_accessory = input(user, input, "Character Preference", hacc_colour) as color|null
 						if(new_head_accessory)
+							new_head_accessory = saturation_value_clamp(new_head_accessory)
 							hacc_colour = new_head_accessory
 
 				if("ha_style")
@@ -1914,6 +1937,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						var/input = "Choose the colour of your your character's head markings:"
 						var/new_markings = input(user, input, "Character Preference", m_colours["head"]) as color|null
 						if(new_markings)
+							new_markings = saturation_value_clamp(new_markings)
 							m_colours["head"] = new_markings
 
 				if("m_style_body")
@@ -1938,6 +1962,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						var/input = "Choose the colour of your your character's body markings:"
 						var/new_markings = input(user, input, "Character Preference", m_colours["body"]) as color|null
 						if(new_markings)
+							new_markings = saturation_value_clamp(new_markings)
 							m_colours["body"] = new_markings
 
 				if("m_style_tail")
@@ -1968,6 +1993,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						var/input = "Choose the colour of your your character's tail markings:"
 						var/new_markings = input(user, input, "Character Preference", m_colours["tail"]) as color|null
 						if(new_markings)
+							new_markings = saturation_value_clamp(new_markings)
 							m_colours["tail"] = new_markings
 
 				if("body_accessory")
@@ -1994,6 +2020,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 					if(species in list(SPECIES_HUMAN, SPECIES_UNATHI, SPECIES_TAJARAN, SPECIES_SKRELL, SPECIES_MACNINEPERSON, SPECIES_VULPKANIN, SPECIES_VOX)) //Species that have facial hair. (No HAS_HAIR_FACIAL flag)
 						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference", f_colour) as color|null
 						if(new_facial)
+							new_facial = saturation_value_clamp(new_facial)
 							f_colour = new_facial
 
 				if("secondary_facial")
@@ -2002,6 +2029,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 						if(facial_hair_style.secondary_theme && !facial_hair_style.no_sec_colour)
 							var/new_facial = input(user, "Choose your character's secondary facial-hair colour:", "Character Preference", f_sec_colour) as color|null
 							if(new_facial)
+								new_facial = saturation_value_clamp(new_facial)
 								f_sec_colour = new_facial
 
 				if("f_style")
@@ -2057,6 +2085,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 				if("underwear_color")
 					var/new_uwear_color = input(user, "Choose your character's underwear colour:", "Character Preference", underwear_color) as color|null
 					if(new_uwear_color)
+						new_uwear_color = saturation_value_clamp(new_uwear_color)
 						underwear_color = new_uwear_color
 
 				if("undershirt")
@@ -2079,6 +2108,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 				if("undershirt_color")
 					var/new_ushirt_color = input(user, "Choose your character's undershirt colour:", "Character Preference", undershirt_color) as color|null
 					if(new_ushirt_color)
+						new_ushirt_color = saturation_value_clamp(new_ushirt_color)
 						undershirt_color = new_ushirt_color
 
 				if("socks")
@@ -2101,6 +2131,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 				if("eyes")
 					var/new_eyes = input(user, "Choose your character's eye colour:", "Character Preference", e_colour) as color|null
 					if(new_eyes)
+						new_eyes = saturation_value_clamp(new_eyes)
 						e_colour = new_eyes
 
 				if("s_tone")
@@ -2128,6 +2159,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 					if((S.bodyflags & HAS_SKIN_COLOR) || ((S.bodyflags & HAS_BODYACC_COLOR) && GLOB.body_accessory_by_species[species]) || check_rights(R_ADMIN, 0, user))
 						var/new_skin = input(user, "Choose your character's skin colour: ", "Character Preference", s_colour) as color|null
 						if(new_skin)
+							new_skin = hue_saturation_value_clamp(new_skin)
 							s_colour = new_skin
 
 				if("ooccolor")
@@ -2486,6 +2518,7 @@ GLOBAL_LIST_INIT(special_role_times, list( //minimum age (in days) for accounts 
 				if("UIcolor")
 					var/UI_style_color_new = input(user, "Choose your UI color, dark colors are not recommended!", UI_style_color) as color|null
 					if(!UI_style_color_new) return
+					UI_style_color_new = saturation_value_clamp(UI_style_color_new)
 					UI_style_color = UI_style_color_new
 
 					if(ishuman(usr)) //mid-round preference changes, for aesthetics
