@@ -15,5 +15,10 @@
   - bugfix: ants & unstable mutagen react with full power even if extremely small
       volume (#6103)
   - tweak: Correct calculation of acids protection (#6102)
+  Testmerge Worker:
+  - refactor: Transit Shuttles (#5247) [testmerge][ec1b044]
+  - add: ASHIE UPDATE (#5875) [testmerge][46ffda3]
+  - add: a lot of roboquest tweaks. (#5961) [testmerge][3de15a7]
+  - add: request console cart in pda[bounty] (#5990) [testmerge][d3c17f5]
   Vladisvell:
   - bugfix: Cult fixes (#6090)
