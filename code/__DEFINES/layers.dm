@@ -35,9 +35,9 @@
 //---------- LIGHTING -------------
 ///Normal 1 per turf dynamic lighting underlays
 #define LIGHTING_PLANE 10
-
+#define LIGHTING_PLANE_ADDITIVE 11
 ///Lighting objects that are "free floating"
-#define O_LIGHTING_VISUAL_PLANE 11
+#define O_LIGHTING_VISUAL_PLANE 12
 #define O_LIGHTING_VISUAL_RENDER_TARGET "O_LIGHT_VISUAL_PLANE"
 
 ///Used in camerachunks to keep some turfs hidden on photo

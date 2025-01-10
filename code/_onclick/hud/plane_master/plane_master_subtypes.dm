@@ -307,3 +307,12 @@
 	appearance_flags = PLANE_MASTER|NO_CLIENT_COLOR
 	render_relay_planes = list(RENDER_PLANE_NON_GAME)
 	offsetting_flags = BLOCKS_PLANE_OFFSETTING|OFFSET_RELAYS_MATCH_HIGHEST
+
+
+/atom/movable/screen/plane_master/additive_lighting
+	name = "additive lighting plane master"
+	plane = LIGHTING_PLANE_ADDITIVE
+	blend_mode = BLEND_ADD
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	appearance_flags = PLANE_MASTER | NO_CLIENT_COLOR
+	render_relay_planes = list(RENDER_PLANE_GAME)

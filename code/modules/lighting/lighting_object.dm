@@ -16,6 +16,7 @@
 
 	///the underlay we are currently applying to our turf to apply light
 	//var/mutable_appearance/current_underlay
+	var/mutable_appearance/additive_underlay
 
 	///whether we are already in the SSlighting.objects_queue list
 	var/needs_update = FALSE
@@ -48,6 +49,9 @@ GLOBAL_LIST_EMPTY(default_lighting_underlays_by_z)
 	if(CONFIG_GET(flag/starlight))
 		for(var/turf/space/space_tile in RANGE_TURFS(1, affected_turf))
 			space_tile.update_starlight()
+
+	additive_underlay = mutable_appearance(LIGHTING_ICON, "transparent_lighting_object", FLOAT_LAYER, src, LIGHTING_PLANE_ADDITIVE, 255, RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM)
+	additive_underlay.blend_mode = BLEND_ADD
 
 	needs_update = TRUE
 	SSlighting.objects_queue += src
@@ -107,7 +111,37 @@ GLOBAL_LIST_EMPTY(default_lighting_underlays_by_z)
 			alpha_corner.cache_r, alpha_corner.cache_g, alpha_corner.cache_b, 00,
 			00, 00, 00, 01
 		)
-		
+
+	if(red_corner.applying_additive || green_corner.applying_additive || blue_corner.applying_additive || alpha_corner.applying_additive)
+		underlays -= additive_underlay
+		additive_underlay.icon_state = "transparent_lighting_object"
+		var/arr = red_corner.add_r
+		var/arb = red_corner.add_b
+		var/arg = red_corner.add_g
+
+		var/agr = green_corner.add_r
+		var/agb = green_corner.add_b
+		var/agg = green_corner.add_g
+
+		var/abr = blue_corner.add_r
+		var/abb = blue_corner.add_b
+		var/abg = blue_corner.add_g
+
+		var/aarr = alpha_corner.add_r
+		var/aarb = alpha_corner.add_b
+		var/aarg = alpha_corner.add_g
+
+		additive_underlay.color = list(
+			arr, arg, arb, 00,
+			agr, agg, agb, 00,
+			abr, abg, abb, 00,
+			aarr, aarg, aarb, 00,
+			00, 00, 00, 01
+		)
+		underlays += additive_underlay
+	else
+		underlays -= additive_underlay
+
 	SSdemo.mark_turf(affected_turf)
 
 
