@@ -71,12 +71,12 @@
 		//Can you and me form a deeper relationship, or is this just a passing wind
 		// (direction & (UP | DOWN)) is just "is this vertical" by the by
 		if(canpass && current_turf.CanAtmosPass(src, (direction & (UP|DOWN))) && !(blocks_air || current_turf.blocks_air))
-			atmos_adjacent_turfs |= current_turf
-			current_turf.atmos_adjacent_turfs |= src
+			LAZYOR(atmos_adjacent_turfs, current_turf)
+			LAZYOR(current_turf.atmos_adjacent_turfs, src)
 			passed_turfs += current_turf
 		else
-			atmos_adjacent_turfs -= current_turf
-			current_turf.atmos_adjacent_turfs -= src
+			LAZYREMOVE(atmos_adjacent_turfs, current_turf)
+			LAZYREMOVE(current_turf.atmos_adjacent_turfs, src)
 
 	return passed_turfs
 
@@ -91,11 +91,11 @@
 			continue
 		var/vertical = (direction & (UP | DOWN))
 		if(CanAtmosPass(turf_target, vertical))
-			atmos_adjacent_turfs |= turf_target
-			turf_target.atmos_adjacent_turfs |= src
+			LAZYOR(atmos_adjacent_turfs, turf_target)
+			LAZYOR(turf_target.atmos_adjacent_turfs, src)
 		else
-			atmos_adjacent_turfs -= turf_target
-			turf_target.atmos_adjacent_turfs -= src
+			LAZYREMOVE(atmos_adjacent_turfs, turf_target)
+			LAZYREMOVE(turf_target.atmos_adjacent_turfs, src)
 
 //returns a list of adjacent turfs that can share air with this one.
 //alldir includes adjacent diagonal tiles that can share
@@ -104,7 +104,7 @@
 	if(!issimulatedturf(src))
 		return list()
 
-	var/adjacent_turfs = atmos_adjacent_turfs.Copy()
+	var/adjacent_turfs = atmos_adjacent_turfs == null ? list() : atmos_adjacent_turfs.Copy()
 	if(!alldir)
 		return adjacent_turfs
 
